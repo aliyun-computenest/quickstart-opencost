@@ -1,0 +1,23 @@
+ChartValues:
+  opencost:
+    prometheus:
+      internal:
+        port: 9090
+        serviceName: arms-prom-server
+        namespaceName: arms-prom
+  service:
+    type: LoadBalancer
+HelmChartPath: opencost
+RuntimeType: Kubernetes
+OutputCmd: |-
+  export SERVICE_IP=$(kubectl get svc --namespace ${Namespace} opencost -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo "http://$SERVICE_IP:9090/"
+ServiceType: private
+ArtifactSourceType: HelmChart
+ServiceBuildRegion: ap-southeast-1
+RepoName: aliyun-computenest/quickstart-opencost
+RegionId: cn-hangzhou
+OutputType: OutputCommand
+Owner: yehanyh
+Branch: main
+Platform: github
