@@ -11,7 +11,7 @@ HelmChartPath: opencost
 RuntimeType: Kubernetes
 OutputCmd: |-
   export SERVICE_IP=$(kubectl get svc --namespace ${Namespace} opencost -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo "http://$SERVICE_IP:9090/"
+   echo "http://$SERVICE_IP:9090/"
 ServiceType: private
 ArtifactSourceType: HelmChart
 ServiceBuildRegion: ap-southeast-1
