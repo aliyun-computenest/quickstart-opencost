@@ -482,9 +482,27 @@ Resources:
         Ref: WorkerSystemDiskSize
       LoginPassword:
         Ref: LoginPassword
-  FluxHelmApplicationModule:
+  ClusterAddons:
     DependsOn:
       - AckOrAcsClusterModule
+    Type: ALIYUN::CS::ClusterAddons
+    Properties:
+      Addons:
+        - Name: arms-prometheus
+      InstalledIgnore: true
+      ClusterId:
+        Fn::GetAtt:
+          - AckOrAcsClusterModule
+          - ClusterId
+  AddonsSleep:
+    Type: ALIYUN::ROS::Sleep
+    DependsOn:
+      - ClusterAddons
+    Properties:
+      CreateDuration: 60
+  FluxHelmApplicationModule:
+    DependsOn:
+      - AddonsSleep
     Type: MODULE::ACS::ComputeNest::FluxOciHelmDeploy
     Version: default
     Properties:
