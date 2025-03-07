@@ -18,6 +18,9 @@ Service:
         '{{ computenest::helmchart::quickstart-opencost }}':
           ArtifactId: ${Artifact.Artifact_1.ArtifactId}
           ArtifactVersion: ${Artifact.Artifact_1.ArtifactVersion}
+        '{{ computenest::helmchart::quickstart-prometheus }}':
+          ArtifactId: ${Artifact.Artifact_2.ArtifactId}
+          ArtifactVersion: ${Artifact.Artifact_2.ArtifactVersion}
     TemplateConfigs:
       - Name: 容器集群版
         Url: 'ros_templates/template.yaml'
@@ -36,8 +39,19 @@ Artifact:
       RepoName: ${HelmChartBuilder.HelmChart_1.RepoName}
       Tag: ${HelmChartBuilder.HelmChart_1.Tag}
       RepoType: Public
+  Artifact_2:
+    ArtifactType: HelmChart
+    ArtifactName: quickstart-prometheus-helm-chart
+    ArtifactProperty:
+      RepoName: ${HelmChartBuilder.HelmChart_2.RepoName}
+      Tag: ${HelmChartBuilder.HelmChart_2.Tag}
+      RepoType: Public
 HelmChartBuilder:
   HelmChart_1:
     HelmChartPath: 'resources/artifact_resources/helm_chart/opencost-1.45.0.tgz'
     RepoName: opencost
     Tag: 1.45.0
+  HelmChart_2:
+    HelmChartPath: 'resources/artifact_resources/helm_chart/prometheus-27.5.1.tgz'
+    RepoName: prometheus
+    Tag: 27.5.1

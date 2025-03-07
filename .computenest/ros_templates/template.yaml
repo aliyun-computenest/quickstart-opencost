@@ -482,27 +482,44 @@ Resources:
         Ref: WorkerSystemDiskSize
       LoginPassword:
         Ref: LoginPassword
-  ClusterAddons:
+  PrometheusHelmApplicationModule:
     DependsOn:
       - AckOrAcsClusterModule
-    Type: ALIYUN::CS::ClusterAddons
+    Type: MODULE::ACS::ComputeNest::FluxOciHelmDeploy
+    Version: default
     Properties:
-      Addons:
-        - Name: arms-prometheus
-      InstalledIgnore: true
       ClusterId:
         Fn::GetAtt:
           - AckOrAcsClusterModule
           - ClusterId
-  AddonsSleep:
-    Type: ALIYUN::ROS::Sleep
-    DependsOn:
-      - ClusterAddons
-    Properties:
-      CreateDuration: 60
+      HelmChartUrl: '{{ computenest::helmchart::quickstart-prometheus }}'
+      ChartValues:
+        prometheus-pushgateway:
+          enabled: false
+        alertmanager:
+          enabled: false
+        extraScrapeConfigs: |
+          - job_name: opencost
+            honor_labels: true
+            scrape_interval: 1m
+            scrape_timeout: 10s
+            metrics_path: /metrics
+            scheme: http
+            dns_sd_configs:
+            - names:
+              - opencost.opencost
+              type: 'A'
+              port: 9003
+        server:
+          persistentVolume:
+            size: 20Gi
+            storageClass: alicloud-disk-topology-alltype
+      Namespace:
+        Ref: 'ALIYUN::StackName'
+      ReleaseName: prometheus
   FluxHelmApplicationModule:
     DependsOn:
-      - AddonsSleep
+      - PrometheusHelmApplicationModule
     Type: MODULE::ACS::ComputeNest::FluxOciHelmDeploy
     Version: default
     Properties:
