@@ -1,17 +1,6 @@
 Service:
   RegionId: cn-hangzhou
   DeployType: ros
-  OperationMetadata:
-    ModifyParametersConfig:
-      - TemplateName: 容器集群版
-        Operation:
-          - Name: 修改Helm参数
-            Description: 修改Helm参数
-            Type: Custom
-            SupportPredefinedParameters: false
-            EnableLogging: false
-            Parameters:
-              - ChartValues
   DeployMetadata:
     SupplierDeployMetadata:
       HelmChartArtifactRelation:
