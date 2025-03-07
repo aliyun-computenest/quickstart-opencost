@@ -395,12 +395,6 @@ Parameters:
               - ${CsOptions}
               - ExistCs
     Default: 172.16.0.0/16
-  ChartValues:
-    Type: Json
-    Label:
-      en: Chart values
-      zh-cn: Chart values
-    Default: '{"opencost": {"prometheus": {"internal": {"port": 9090, "serviceName": "arms-prom-server", "namespaceName": "arms-prom"}}}, "service": {"type": "LoadBalancer"}}'
 Conditions:
   CreateClusterCondition:
     Fn::Or:
@@ -529,7 +523,15 @@ Resources:
           - ClusterId
       HelmChartUrl: '{{ computenest::helmchart::quickstart-opencost }}'
       ChartValues:
-        Ref: ChartValues
+        opencost:
+          prometheus:
+            internal:
+              port: 80
+              serviceName: prometheus-server
+              namespaceName:
+                Ref: 'ALIYUN::StackName'
+        service:
+          type: LoadBalancer
       Namespace:
         Ref: 'ALIYUN::StackName'
       ReleaseName: opencost
@@ -603,11 +605,6 @@ Metadata:
         Label:
           en: Kubernetes
           zh-cn: Kubernetes配置
-      - Parameters:
-          - ChartValues
-        Label:
-          en: Helm Config
-          zh-cn: Helm配置
       - Parameters:
           - ZoneId
           - VpcOption
